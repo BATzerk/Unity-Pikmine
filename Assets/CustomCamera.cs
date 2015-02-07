@@ -3,9 +3,9 @@ using System.Collections;
 
 public class CustomCamera : MonoBehaviour {
 	// Settables
-	private float distanceUp = 3f;
-	private float distanceAway = 5f;
-	private float positionEasing = 2f;
+	private float distanceUp = 4f;
+	private float distanceAway = 10f;
+	private float positionEasing = 3f;
 	// References
 	[SerializeField]
 	Transform myTarget;
@@ -16,9 +16,10 @@ public class CustomCamera : MonoBehaviour {
 		
 	}
 	
-	void Update () {
-		// Move to a nice position behind my target!
-		targetPosition = myTarget.position + Vector3.up*distanceUp - myTarget.forward*distanceAway;
+	void FixedUpdate () {
+		// Move to a nice position!
+		float angleToTarget = Mathf.Atan2 (transform.position.z-myTarget.position.z, transform.position.x-myTarget.position.x);
+		targetPosition = myTarget.position + Vector3.up*distanceUp + new Vector3(Mathf.Cos (angleToTarget)* distanceAway, 0, Mathf.Sin (angleToTarget)* distanceAway);
 		transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime*positionEasing);
 		// Look at my target!
 		transform.LookAt (myTarget);
